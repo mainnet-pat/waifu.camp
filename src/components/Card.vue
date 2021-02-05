@@ -45,7 +45,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-interface Waifu {
+export interface Waifu {
   name: string;
   tokenId: string;
   owner: string;
