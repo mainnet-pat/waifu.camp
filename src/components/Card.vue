@@ -17,9 +17,9 @@
             </div>
 
             <div class="content">
-              <div>
-                <span v-text="`Owner: ${waifu.owner.split(':')[1].substring(0, 12)}...`"></span>
-                <b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon>
+              <div style="cursor: pointer">
+                <span @click="addressClick()" v-text="`Owner: ${waifu.owner.split(':')[1].substring(0, 12)}...`"></span>
+                <span @click="addressExplore()"><b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon></span>
               </div>
               <div style="display: flex;  flex-direction: row;">
                 <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div>
@@ -92,6 +92,15 @@ export default class Card extends Vue {
   public toggleLike() {
     this.waifu.likes += this.waifu.likes ? -1 : 1;
     this.waifu.liked = !this.waifu.liked;
+  }
+
+  public addressClick() {
+    let short = this.waifu.owner.split(":")[1];
+    this.$router.push({name: 'Camp', params: { address: short }});
+  }
+
+  public addressExplore() {
+    window.open(`https://simpleledger.info/#address/${this.waifu.owner}`, "_blank"); 
   }
 
   public imageClick() {

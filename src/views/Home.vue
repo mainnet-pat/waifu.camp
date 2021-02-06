@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div>
+    <h1 class="title is-1" style="padding-top: 1rem;">Welcome to waifu.camp 🏕</h1>
+    <Gallery :address="undefined" style="padding-bottom: 1rem;"></Gallery>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import { Component, Prop, Vue } from "vue-property-decorator";
+
+import Gallery from "@/components/Gallery.vue";
 
 @Component({
   components: {
-    HelloWorld
+    Gallery,
   }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+}
 </script>
+
+<style lang="scss">
+
+</style>
