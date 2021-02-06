@@ -41,9 +41,9 @@ export default class Gallery extends Vue {
   async fetchMoreWaifus() {
     const query = SlpDbTemplates.addressWaifus(this.address , this.limit, this.skip);
     const provider = new SlpDbProvider(Network.MAINNET);
+    provider.caching = true;
     const result = (await provider.SlpDbQuery(query)).t as unknown[] as Waifu[];
     for (const waifu of result) {
-      console.log(waifu.date);
       waifu.date = new Date((waifu.date as unknown as number) * 1000);
       setTimeout(() => this.waifus.push(waifu), 1);
     }

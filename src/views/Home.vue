@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 class="title is-1" style="padding-top: 1rem;">Welcome to waifu.camp 🏕</h1>
+    <Navbar :title="'Waifu.camp'"></Navbar>
+    <h1 class="title is-1" style="padding-top: 1rem;">Welcome to waifu.camp</h1>
     <Gallery :address="undefined" style="padding-bottom: 1rem;"></Gallery>
   </div>
 </template>
@@ -9,10 +10,11 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 import Gallery from "@/components/Gallery.vue";
+import Navbar from "@/components/Navbar.vue";
 
 @Component({
   components: {
-    Gallery,
+    Navbar, Gallery
   }
 })
 export default class Home extends Vue {

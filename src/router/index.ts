@@ -1,11 +1,24 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter, { RawLocation, Route, RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import App from "@/App.vue";
 import Camp from "@/views/Camp.vue";
 
 Vue.use(VueRouter);
 
+const originalPush = VueRouter.prototype.push;
+VueRouter.prototype.push = async function (location: RawLocation) {
+  let route: Route;
+  try {
+    route = await originalPush.call<VueRouter, [RawLocation], Promise<Route>>(this, location);
+  } catch (err) {
+    if (err.name !== 'NavigationDuplicated') {
+      throw err;
+    }
+  }
+
+  return route!;
+}
 const routes: Array<RouteConfig> = [
   {
     path: "/",

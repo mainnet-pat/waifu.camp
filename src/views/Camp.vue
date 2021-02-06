@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Navbar :title="'Waifu.camp'"></Navbar>
     <h1 class="title is-1" style="padding-top: 1rem;">Camp of {{ short }}-San</h1>
     <Gallery :address="address" style="margin-bottom: 1rem;"></Gallery>
   </div>
@@ -8,11 +9,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
+import Navbar from "@/components/Navbar.vue";
 import Gallery from "@/components/Gallery.vue";
 
 @Component({
   components: {
-    Gallery,
+    Navbar, Gallery,
   }
 })
 export default class Camp extends Vue {

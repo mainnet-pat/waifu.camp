@@ -14,6 +14,9 @@ import Home from "@/views/Home.vue"
   }
 })
 export default class App extends Vue {
+  beforeMount() {
+    this.$store.dispatch("restoreState");
+  }
 }
 </script>
 
