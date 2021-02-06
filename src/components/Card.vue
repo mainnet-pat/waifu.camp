@@ -114,16 +114,8 @@ export default class Card extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
   .card .media:not(:last-child) {
     margin-bottom: 0.75rem;
-  }
-
-  w-250 {
-    width: 250px;
-  }
-
-  h-489 {
-    height: 489px;
   }
 </style>
