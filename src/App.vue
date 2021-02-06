@@ -1,6 +1,13 @@
 <template>
   <div id="app">
     <router-view></router-view>
+        <b-tooltip multilined type="is-primary is-light" class="sticky" position="is-left" size="is-large">
+          <template v-slot:content>
+              Background image: Yuru Camp<br/> No copyright infringement intended.<br/>Made by pat with ❤️
+          </template>
+          <b-icon class="is-primary" icon="help-circle"></b-icon>
+        </b-tooltip>
+
   </div>
 </template>
 
@@ -21,25 +28,40 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
+//   @import "~bulma/sass/utilities/_all";
+//   $primary: #2059AF;
+//   $primary-invert: findColorInvert($primary);
+//   $twitter: #4099FF;
+//   $twitter-invert: findColorInvert($twitter);
+
+//   $colors: (
+//       "white": ($white, $black),
+//       "black": ($black, $white),
+//       "light": ($light, $light-invert),
+//       "dark": ($dark, $dark-invert),
+//       "primary": ($primary, $primary-invert),
+//       "info": ($info, $info-invert),
+//       "success": ($success, $success-invert),
+//       "warning": ($warning, $warning-invert),
+//       "danger": ($danger, $danger-invert),
+//       "twitter": ($twitter, $twitter-invert)
+//   );
+
+//   // Links
+//   $link: $primary;
+//   $link-invert: $primary-invert;
+//   $link-focus-border: $primary;
+
+//   // Import Bulma and Buefy styles
+// @import "~bulma";
+// @import "~buefy/src/scss/buefy";
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 
 .slide-fade-enter-active {
@@ -66,8 +88,14 @@ html {
   background-size: cover;
 }
 
-  h1.title {
-    color: white; text-shadow: 0px 0px 9px #000000;
-  }
+h1.title {
+  color: white; text-shadow: 0px 0px 9px #000000;
+}
+
+span.sticky{
+    position: fixed;
+    bottom: 17pt;
+    right: 12pt;
+}
 
 </style>

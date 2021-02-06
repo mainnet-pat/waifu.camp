@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Navbar :ssubtitle="'New waifus'"></Navbar>
-    <h1 class="title is-1">Welcome to waifu.camp</h1>
-    <Gallery style="padding-bottom: 1rem;"></Gallery>
+    <Navbar :ssubtitle="'Random waifus'"></Navbar>
+    <h1 class="title is-1">Random waifus</h1>
+    <Gallery :random="true" style="padding-bottom: 1rem;"></Gallery>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import Navbar from "@/components/Navbar.vue";
     Navbar, Gallery
   }
 })
-export default class Home extends Vue {
+export default class Random extends Vue {
 }
 </script>
 

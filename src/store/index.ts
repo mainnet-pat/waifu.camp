@@ -55,7 +55,7 @@ export default new Vuex.Store({
     },
 
     restoreState(context) {
-      let user = JSON.parse(window.localStorage.getItem('user') || "") || undefined;
+      let user = JSON.parse(window.localStorage.getItem('user') || "null");
       let token = window.localStorage.getItem('token') || undefined;
 
       if (user) {

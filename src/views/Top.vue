@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Navbar :ssubtitle="'New waifus'"></Navbar>
-    <h1 class="title is-1">Welcome to waifu.camp</h1>
-    <Gallery style="padding-bottom: 1rem;"></Gallery>
+    <Navbar></Navbar>
+    <h1 class="title is-1">Top waifus</h1>
+    <h1 class="title is-2" style="margin-top:5rem">Coming Soon...</h1>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import Navbar from "@/components/Navbar.vue";
     Navbar, Gallery
   }
 })
-export default class Home extends Vue {
+export default class Top extends Vue {
 }
 </script>
 

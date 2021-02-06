@@ -54,3 +54,39 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
 export function newWaifus(limit: number = 10, skip: number = 0) {
   return addressWaifus(undefined, limit, skip);
 }
+
+export function randomWaifus(limit: number = 10) {
+  return {
+    "v": 3,
+    "q": {
+      "db": ["t"],
+      "aggregate": [
+        {
+          "$match": {
+            "nftParentId": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66"
+          }
+        },
+        {
+          "$lookup": {
+            "from": "graphs",
+            "localField": "tokenDetails.tokenIdHex",
+            "foreignField": "tokenDetails.tokenIdHex",
+            "as": "graph"
+          }
+        },
+        {
+          "$match": {
+            "graph.graphTxn.outputs.status": "UNSPENT"
+          }
+        },
+        { "$sample": { "size": limit } }
+      ],
+      'sort': {
+        'tokenDetails.timestamp_unix': -1,
+      },
+    },
+    "r": {
+      "f": "[ .[] | { name: .tokenDetails.name, date: .tokenDetails.timestamp_unix, tokenId: .tokenDetails.tokenIdHex, owner: .graph[0].graphTxn.outputs[0].address } ]"
+    }
+  };
+}

@@ -25,6 +25,7 @@ import * as SlpDbTemplates from "@/scripts/SlpDbTemplates";
 
 export default class Gallery extends Vue {
   @Prop() address!: string;
+  @Prop({default: false}) random!: boolean;
   @Prop({default: () => []}) waifus!: Waifu[];
 
   private skip: number = 0;
@@ -39,7 +40,13 @@ export default class Gallery extends Vue {
   }
 
   async fetchMoreWaifus() {
-    const query = SlpDbTemplates.addressWaifus(this.address , this.limit, this.skip);
+    let query;
+    if (this.random) {
+      query = SlpDbTemplates.randomWaifus(this.limit);
+    } else {
+      query = SlpDbTemplates.addressWaifus(this.address , this.limit, this.skip);
+    }
+
     const provider = new SlpDbProvider(Network.MAINNET);
     provider.caching = true;
     const result = (await provider.SlpDbQuery(query)).t as unknown[] as Waifu[];

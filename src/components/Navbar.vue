@@ -1,18 +1,18 @@
 <template>
   <div>
-    <nav class="navbar is-primary" role="navigation" aria-label="dropdown navigation"
+    <nav class="navbar" role="navigation" aria-label="dropdown navigation"
       v-on:update:title="updateTitle($event)"
       v-on:update:subtitle="updateSubtitle($event)">
       <div class="container">
         <div class="navbar-brand">
           <div class="navbar-item">
-            <div class="hero is-primary">
+            <div class="hero">
               <div class="columns is-vcentered is-mobile">
                 <div class="column">
                   <span class="title" @click="navigateTitle">
-                    <a style="color: #fff"> {{ Title }} 🏕</a>
+                    <a style="color: #fff"> {{ Title }} </a>
                   </span>
-                  <span style="margin-left: 10pt" class="subtitle">
+                  <span style="margin-left: 20pt" class="subtitle">
                     {{ Subtitle }}
                     <slot name="subtitle"></slot>
                   </span>
@@ -20,76 +20,85 @@
               </div>
             </div>
           </div>
-
-          <div class="navbar-burger burger" style="margin-top:12.5px;" :class="burgerClass" data-target="navbar-menu" @click="burgerActive = !burgerActive">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
         </div>
-
-        <div id="navbar-menu" class="navbar-menu" :class="burgerClass">
+      </div>
+    </nav>
+        <div id="navbar-menu" class="navbar-menus" :sclass="burgerClass">
           <div class="navbar-end" style="text-align: left">
 
             <div class="navbar-item">
               <b-field grouped>
                 <slot></slot>
 
-                <b-dropdown position="is-bottom-left" v-if="loggedIn()">
-                  <a class="is-primary button" slot="trigger">
-                    <span>Menu</span>
-                    <b-icon icon="menu-down"></b-icon>
+                <b-dropdown position="is-bottom-left">
+                  <a class="button" slot="trigger">
+                    <!-- <span>Menu</span> -->
+                    <b-icon icon="menu"></b-icon>
+                    <!-- <b-icon icon="menu-down"></b-icon> -->
                   </a>
 
-                  <b-dropdown-item custom>
-                    <p>Logged in as:</p>
-                    <p><b>{{ short }}</b></p>
-                  </b-dropdown-item>
-                  <hr class="dropdown-divider">
+                  <div v-if="loggedIn()">
+                    <b-dropdown-item custom>
+                      <p>Logged in as:</p>
+                      <p><b>{{ short }}</b></p>
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="$router.push( { name: 'Camp', params: { address: user().address } } )">
+                        <b-icon icon="account"></b-icon>
+                        Your camp
+                    </b-dropdown-item>
+                    <b-dropdown-item @click="logout()">
+                        <b-icon icon="logout"></b-icon>
+                        Logout
+                    </b-dropdown-item>
+                    <hr class="dropdown-divider">
+                  </div>
+
                   <b-dropdown-item @click="$router.push('/')">
                       <b-icon icon="home"></b-icon>
                       Home
                   </b-dropdown-item>
-                  <b-dropdown-item @click="$router.push( { name: 'Camp', params: { address: user().address } } )">
-                      <b-icon icon="account"></b-icon>
-                      Your camp
+                  <b-dropdown-item @click="$router.push('/top')">
+                      <b-icon icon="fire"></b-icon>
+                      Top
                   </b-dropdown-item>
-                  <b-dropdown-item @click="logout()">
-                      <b-icon icon="logout"></b-icon>
-                      Logout
+                  <b-dropdown-item @click="$router.push('/random')">
+                      <b-icon icon="dice-multiple"></b-icon>
+                      Random
                   </b-dropdown-item>
-                </b-dropdown>
-
-                <b-dropdown position="is-bottom-left" v-else>
-                  <a class="is-primary button" slot="trigger">
-                    <span>Login</span>
-                    <b-icon icon="menu-down"></b-icon>
-                  </a>
-
-                  <b-dropdown-item custom paddingless>
-                    <form @submit.prevent="login()">
-                      <div class="modal-card" style="width:300px;">
-                        <section class="modal-card-body">
-                            <b-field label="Simpleledger Address">
-                              <b-input v-model="auth.address" size="is-small"></b-input>
-                            </b-field>
-
-                            <b-field style="margin-top: 10pt;">
-                              <p class="control">
-                                <b-button class="button is-primary" @click.prevent="login">Login</b-button>
-                              </p>
-                            </b-field>
-                        </section>
-                      </div>
-                    </form>
+                  <b-dropdown-item @click="$router.push('/search')">
+                      <b-icon icon="magnify"></b-icon>
+                      Search
                   </b-dropdown-item>
+                  <b-dropdown-item @click="faucetClick()">
+                      <b-icon icon="water-pump"></b-icon>
+                      Faucet
+                  </b-dropdown-item>
+
+                  <div v-if="!loggedIn()">
+                    <hr class="dropdown-divider">
+                    <b-dropdown-item custom paddingless>
+                      <form @submit.prevent="login()">
+                        <div class="modal-card" style="width:300px;">
+                          <section class="modal-card-body">
+                              <b-field label="Simpleledger Address">
+                                <b-input v-model="auth.address" size="is-small"></b-input>
+                              </b-field>
+
+                              <b-field style="margin-top: 10pt;">
+                                <p class="control">
+                                  <b-button class="button" @click.prevent="login()">Login</b-button>
+                                </p>
+                              </b-field>
+                          </section>
+                        </div>
+                      </form>
+                    </b-dropdown-item>
+                  </div>
                 </b-dropdown>
               </b-field>
             </div>
           </div>
         </div>
-      </div>
-    </nav>
   </div>
 </template>
 
@@ -108,7 +117,7 @@ import { mapGetters } from 'vuex';
       return {
         auth: { address: '' },
         burgerActive: false,
-        Title: this.title,
+        Title: this.title || 'waifu.camp 🏕',
         Subtitle: this.subtitle || '',
       }
     },
@@ -121,6 +130,10 @@ import { mapGetters } from 'vuex';
 
       navigateTitle() {
         this.$router.push("/");
+      },
+
+      faucetClick() {
+        window.open("https://waifufaucet.com", "_blank");
       },
 
       getText(elementClassName) {
@@ -162,12 +175,24 @@ import { mapGetters } from 'vuex';
   }
 </script>
 
-<style>
-.navbar-menu {
-  background-color: rgba(0, 0, 0, 0);
+<style lang="scss">
+span.title {
+  color: white; text-shadow: 0px 0px 4px #000000;
 }
 
-.navbar.is-primary {
-    background-color: #7957d5;
+span.subtitle {
+  color: white; text-shadow: 0px 0px 4px #000000;
+}
+
+div.navbar-menus {
+  background-color: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: 0pt;
+  right: 4pt;
+  z-index: 100;
+}
+
+nav.navbar {
+  background-color: #00000000;
 }
 </style>

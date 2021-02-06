@@ -1,5 +1,5 @@
 <template>
-  <div :class="waifu.fullscreen ? '' : 'tile is-child is-3'">
+  <div :class="waifu.fullscreen ? '' : 'tile is-child is-3 h-489'">
 
     <div>
       <div style="text-align: left; margin: 10pt">
@@ -121,5 +121,9 @@ export default class Card extends Vue {
 
   w-250 {
     width: 250px;
+  }
+
+  h-489 {
+    height: 489px;
   }
 </style>
