@@ -34,27 +34,13 @@
         </div>
       </div>
     </div>
-
-    <b-modal v-model="modal" :width="550">
-      <LargeCard :config="Object.assign({}, {...waifu, ...{fullscreen: true}})"></LargeCard>
-    </b-modal>
-
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import LargeCard from "@/components/LargeCard.vue";
-
-export interface Waifu {
-  name: string;
-  tokenId: string;
-  owner: string;
-  date: Date;
-  likes: number;
-  liked: boolean;
-  fullscreen: boolean;
-}
+import { Waifu } from "@/scripts/Waifu";
+import Card from "@/components/Card.vue";
 
 const defaultWaifu: Waifu = {
     name: "Hiroa Sen",
@@ -68,10 +54,9 @@ const defaultWaifu: Waifu = {
 
 @Component({
   components: {
-    LargeCard
   }
 })
-export default class Card extends Vue {
+export default class LargeCard extends Vue {
   @Prop() config!: Waifu;
 
   private waifu: Waifu = {} as Waifu;
