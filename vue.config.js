@@ -1,3 +1,10 @@
 module.exports = {
-  lintOnSave: false
+  lintOnSave: false,
+  configureWebpack: {
+    devServer: {
+      compress: true,
+      inline: true,
+      public: 'waifu.camp'
+    },
+  }
 };
