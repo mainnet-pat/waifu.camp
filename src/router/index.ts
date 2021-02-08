@@ -4,6 +4,7 @@ import App from "@/App.vue";
 import Home from "@/views/Home.vue";
 import New from "@/views/New.vue";
 import Camp from "@/views/Camp.vue";
+import Waifu from "@/views/Waifu.vue";
 import Random from "@/views/Random.vue";
 import Top from "@/views/Top.vue";
 import Search from "@/views/Search.vue";
@@ -38,6 +39,12 @@ const routes: Array<RouteConfig> = [
     path: "/camp/:address",
     name: "Camp",
     component: Camp,
+    props: true
+  },
+  {
+    path: "/waifu/:tokenId",
+    name: "Waifu",
+    component: Waifu,
     props: true
   },
   {

@@ -12,7 +12,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 
-import Card, { Waifu } from "@/components/Card.vue";
+import Card from "@/components/Card.vue";
+import { Waifu } from "@/scripts/Waifu";
 import { Network, SlpDbProvider } from "mainnet-js";
 import * as SlpDbTemplates from "@/scripts/SlpDbTemplates";
 

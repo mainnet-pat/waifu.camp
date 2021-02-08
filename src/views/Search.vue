@@ -2,7 +2,7 @@
   <div>
     <Navbar></Navbar>
     <h1 class="title is-1">Search waifus</h1>
-    <!-- <h1 class="title is-2" style="margin-top:5rem">Coming Soon...</h1> -->
+
     <section>
       <b-field position="is-centered" class="w-512">
         <b-input v-model="address" placeholder="Simpleledger address" type="search" icon="magnify"></b-input>

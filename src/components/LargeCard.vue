@@ -1,5 +1,5 @@
 <template>
-  <div :class="waifu.fullscreen ? '' : 'tile is-child is-3 h-489'">
+  <div :class="waifu.fullscreen ? '' : 'tile is-child is-3'">
 
     <div>
       <div style="text-align: left; margin: 10pt">
@@ -39,18 +39,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { Waifu } from "@/scripts/Waifu";
+import { Waifu, defaultWaifu } from "@/scripts/Waifu";
 import Card from "@/components/Card.vue";
-
-const defaultWaifu: Waifu = {
-    name: "Hiroa Sen",
-    tokenId: "418a19475fb028a983f8c83454d5cb043b1c7740391d279f759a2eb6c531c6ef",
-    owner: "simpleledger:qp8dwmz6qjcku3kuxhhl83u3zxvnkxth55erf2s94z",
-    date: new Date(),
-    likes: 0,
-    liked: false,
-    fullscreen: false
-  }
 
 @Component({
   components: {
@@ -60,8 +50,6 @@ export default class LargeCard extends Vue {
   @Prop() config!: Waifu;
 
   private waifu: Waifu = {} as Waifu;
-
-  private modal: boolean = false;
 
   beforeMount() {
     this.setConfig(this.config);
@@ -91,14 +79,6 @@ export default class LargeCard extends Vue {
 
   public addressExplore() {
     window.open(`https://simpleledger.info/#address/${this.waifu.owner}`, "_blank"); 
-  }
-
-  public imageClick() {
-    if (!this.waifu.fullscreen) {
-      this.modal = !this.modal;
-    } else {
-      (this.$parent.$parent as Card).imageClick();
-    }
   }
 }
 </script>

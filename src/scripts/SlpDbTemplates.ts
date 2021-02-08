@@ -55,6 +55,40 @@ export function newWaifus(limit: number = 10, skip: number = 0) {
   return addressWaifus(undefined, limit, skip);
 }
 
+export function singleWaifu(tokenId: string) {
+  let query = {
+    "v": 3,
+    "q": {
+      "db": ["t"],
+      "aggregate": [
+        {
+          "$match": {
+            "tokenDetails.tokenIdHex": tokenId
+          }
+        },
+        {
+          "$lookup": {
+            "from": "graphs",
+            "localField": "tokenDetails.tokenIdHex",
+            "foreignField": "tokenDetails.tokenIdHex",
+            "as": "graph"
+          }
+        },
+        {
+          "$match": {
+            "graph.graphTxn.outputs.status": "UNSPENT"
+          }
+        }
+      ]
+    },
+    "r": {
+      "f": "[ .[] | { name: .tokenDetails.name, date: .tokenDetails.timestamp_unix, tokenId: .tokenDetails.tokenIdHex, owner: .graph[0].graphTxn.outputs[0].address } ]"
+    }
+  }
+
+  return query;
+}
+
 export function randomWaifus(limit: number = 10) {
   return {
     "v": 3,
