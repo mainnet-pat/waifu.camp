@@ -77,7 +77,7 @@ export default class App extends Vue {
 }
 
 html {
-  background-image: url('assets/camp3.jpg');
+  background-image: url('/camp.jpg');
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 100%;
