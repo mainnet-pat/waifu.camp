@@ -6,7 +6,7 @@ RUN git clone https://mainnet-pat:70cee21a42e585d7be2049c8fb5c5f0cc09ad9e3@githu
 WORKDIR /opt/waifu.camp
 RUN yarn
 RUN yarn add mainnet-js
-RUN git pull origin master && echo 7
+RUN git pull origin master && echo 8
 RUN yarn
 RUN yarn build
 CMD node server.js
