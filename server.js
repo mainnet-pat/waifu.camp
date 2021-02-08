@@ -9,7 +9,7 @@ const index = fs.readFileSync(path.join(__dirname, '/dist/index.html')).toString
 
 app.get('/waifu/:tokenId', (req, res) => {
   const tokenId = req.params.tokenId;
-  const replaced = index.replace(/"(https:\/\/waifu\.camp\/camp\.jpg)"/, `"https://icons.waifufaucet.com/original/${tokenId}.png"`);
+  const replaced = index.replace(/"(https:\/\/waifu\.camp\/camp\.jpg)"/g, `"https://icons.waifufaucet.com/original/${tokenId}.png"`);
   res.send(replaced);
 });
 
