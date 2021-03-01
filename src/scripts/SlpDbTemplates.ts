@@ -6,7 +6,7 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
       "aggregate": [
         {
           "$match": {
-            "nftParentId": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66"
+            "nftParentId": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
           }
         },
         {
@@ -23,8 +23,8 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
           }
         }
       ],
-      'sort': {
-        'tokenDetails.timestamp_unix': -1,
+      "sort": {
+        "tokenDetails.timestamp_unix": -1
       },
       "limit": limit,
       "skip": skip

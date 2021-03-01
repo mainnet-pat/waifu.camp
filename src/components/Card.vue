@@ -18,7 +18,7 @@
 
             <div class="content">
               <div style="cursor: pointer">
-                <span @click="addressClick()" v-text="`Owner: ${waifu.owner.split(':')[1].substring(0, 12)}...`"></span>
+                <span @click="addressClick()" v-text="`Owner: ${short()}`"></span>
                 <span @click="addressExplore()"><b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon></span>
               </div>
               <div style="display: flex;  flex-direction: row;">
@@ -94,6 +94,15 @@ export default class Card extends Vue {
       this.modal = !this.modal;
     } else {
       (this.$parent.$parent as Card).imageClick();
+    }
+  }
+
+  public short() {
+    const address = this.waifu.owner;
+    if (address.indexOf(":")>0) {
+      return address.split(':')[1].substring(0, 4) + "-San";
+    } else {
+      return address.substring(0, 4) + "-San";
     }
   }
 }
