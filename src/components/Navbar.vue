@@ -106,6 +106,7 @@
 import bchaddr from 'bchaddrjs-slp';
 
 import { mapGetters } from 'vuex';
+import * as Utils from '@/scripts/Utils';
 
   export default {
     name: 'Navbar',
@@ -161,11 +162,7 @@ import { mapGetters } from 'vuex';
     computed: {
       short() {
         const address = this.user() ? this.user().address : "";
-        if (address.indexOf(":")>0) {
-          return address.split(':')[1].substring(0, 4) + "-San";
-        } else {
-          return address.substring(0, 4) + "-San";
-        }
+        return Utils.addressToName(address);
       },
 
       burgerClass() {

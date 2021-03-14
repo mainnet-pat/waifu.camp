@@ -2,7 +2,7 @@
   <div>
     <Navbar></Navbar>
     <h1 class="title is-1">Welcome to waifu.camp</h1>
-    <Gallery :address="undefined" style="padding-bottom: 1rem;"></Gallery>
+    <Gallery :new="true" style="padding-bottom: 1rem;"></Gallery>
   </div>
 </template>
 

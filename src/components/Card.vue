@@ -1,12 +1,12 @@
 <template>
-  <div :class="waifu.fullscreen ? '' : 'tile is-child is-3 h-489'">
+  <div :class="waifu.fullscreen ? '' : 'tile is-child is-2 h-489'">
 
     <div>
       <div style="text-align: left; margin: 10pt">
         <div class="card">
           <div class="card-image" @click="imageClick">
             <figure class="image is-4by4">
-              <img :src="`https://icons.waifufaucet.com/original/${waifu.tokenId}.png`" :alt="waifu.name">
+              <img :src="`https://icons.waifufaucet.com/128/${waifu.tokenId}.png`" :alt="waifu.name">
             </figure>
           </div>
           <div class="card-content">
@@ -21,8 +21,8 @@
                 <span @click="addressClick()" v-text="`Owner: ${short()}`"></span>
                 <span @click="addressExplore()"><b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon></span>
               </div>
-              <div style="display: flex;  flex-direction: row;">
-                <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div>
+              <div style="display: box;  flex-direction: row;">
+                <!-- <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div> -->
                 <div class="" style="flex-grow: 2; text-align: right" :style="waifu.liked ? 'color: red' : 'color: black'" @click="toggleLike">
                   <b-icon icon="heart" size="is-small"></b-icon>
                   <span v-text="waifu.likes"></span>
@@ -46,6 +46,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import LargeCard from "@/components/LargeCard.vue";
 import { Waifu, defaultWaifu } from "@/scripts/Waifu";
+import * as Utils from "@/scripts/Utils";
 
 @Component({
   components: {
@@ -98,12 +99,7 @@ export default class Card extends Vue {
   }
 
   public short() {
-    const address = this.waifu.owner;
-    if (address.indexOf(":")>0) {
-      return address.split(':')[1].substring(0, 4) + "-San";
-    } else {
-      return address.substring(0, 4) + "-San";
-    }
+    return Utils.addressToName(this.waifu.owner);
   }
 }
 </script>

@@ -27,13 +27,15 @@ import * as SlpDbTemplates from "@/scripts/SlpDbTemplates";
 export default class Gallery extends Vue {
   @Prop() address!: string;
   @Prop({default: false}) random!: boolean;
+  @Prop({default: false}) new!: boolean;
   @Prop({default: () => []}) waifus!: Waifu[];
 
   private skip: number = 0;
-  private limit: number = 12;
+  private limit: number = 24;
 
   get moreVisible() {
-    return this.waifus.length >= this.limit;
+    // return this.waifus.length >= this.limit;
+    return true;
   }
 
   async beforeMount() {
@@ -44,17 +46,28 @@ export default class Gallery extends Vue {
     let query;
     if (this.random) {
       query = SlpDbTemplates.randomWaifus(this.limit);
+    } else if (this.new) {
+      query = SlpDbTemplates.newWaifus("", this.limit, this.skip);
     } else {
-      query = SlpDbTemplates.addressWaifus(this.address , this.limit, this.skip);
+      query = SlpDbTemplates.addressWaifus(this.address, this.limit, this.skip);
     }
 
     const provider = new SlpDbProvider(Network.MAINNET);
     provider.caching = true;
-    const result = (await provider.SlpDbQuery(query)).t as unknown[] as Waifu[];
+    const rawResult = (await provider.SlpDbQuery(query));
+    let result: Waifu[] = [...(rawResult.t || []), ...(rawResult.g || []), ...(rawResult.u || []), ...(rawResult.c || [])];
+
+    if (!result.length) {
+      this.$buefy.snackbar.open({message: `Nothing more found`, type: 'is-warning', position: 'is-top-right'});
+      return;
+    }
     for (const waifu of result) {
       waifu.date = new Date((waifu.date as unknown as number) * 1000);
-      setTimeout(() => this.waifus.push(waifu), 1);
     }
+    this.waifus = [...this.waifus, ...result];
+    this.waifus = this.waifus.filter((val, idx) =>
+      idx === this.waifus.findIndex(w => w.tokenId === val.tokenId)
+    );
 
     this.skip += this.limit;
   }

@@ -12,6 +12,7 @@ import { mapGetters } from 'vuex';
 
 import Navbar from "@/components/Navbar.vue";
 import Gallery from "@/components/Gallery.vue";
+import * as Utils from "@/scripts/Utils";
 
 
 @Component({
@@ -27,20 +28,15 @@ import Gallery from "@/components/Gallery.vue";
 export default class Camp extends Vue {
   @Prop() address!: string;
 
-  private short: string = "";
   private title: string = "";
 
   beforeMount() {
-    if (this.address.indexOf(":")>0) {
-      this.short = this.address.split(':')[1].substring(0, 4);
-    } else {
-      this.short = this.address.substring(0, 4);
-    }
+    const short = Utils.addressToName(this.address);
 
     if (this.$store.state.user && this.$store.state.user.address === this.address) {
-      this.title = `Welcome back to your camp ${this.short}-San`;
+      this.title = `Welcome back to your camp ${short}`;
     } else {
-      this.title = `Camp of ${this.short}-San`
+      this.title = `Camp of ${short}`
     }
   }
 }

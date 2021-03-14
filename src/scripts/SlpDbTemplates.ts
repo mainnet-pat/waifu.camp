@@ -1,4 +1,9 @@
 export function addressWaifus(address?: string, limit: number = 10, skip: number = 0) {
+  return newWaifus(address, limit, skip);
+  // return addressWaifusOverToken(address, limit, skip);
+}
+
+export function addressWaifusOverToken(address?: string, limit: number = 10, skip: number = 0) {
   let query = {
     "v": 3,
     "q": {
@@ -7,6 +12,9 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
         {
           "$match": {
             "nftParentId": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
+            "lastUpdatedBlock": {
+              "$gt": 670000
+            }
           }
         },
         {
@@ -30,7 +38,7 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
       "skip": skip
     },
     "r": {
-      "f": "[ .[] | { name: .tokenDetails.name, date: .tokenDetails.timestamp_unix, tokenId: .tokenDetails.tokenIdHex, owner: .graph[0].graphTxn.outputs[0].address } ]"
+      "f": "[ .[] | { name: .tokenDetails.name, date: .tokenDetails.timestamp_unix, tokenId: .tokenDetails.tokenIdHex, owner: .graph[-1].graphTxn.outputs[0].address } ]"
     }
   };
 
@@ -48,11 +56,116 @@ export function addressWaifus(address?: string, limit: number = 10, skip: number
     );
   }
 
+  console.log(JSON.stringify(query, null, 2));
+
   return query;
 }
 
-export function newWaifus(limit: number = 10, skip: number = 0) {
-  return addressWaifus(undefined, limit, skip);
+export function addressWaifusOverGraph(address?: string, limit: number = 10, skip: number = 0) {
+  let query = {
+    "v": 3,
+    "q": {
+        "db": ["g"],
+        "aggregate": [
+            {
+                "$match": {
+                    "tokenDetails.nftGroupIdHex": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
+                    // "graphTxn.outputs.address": address,
+                    "graphTxn.outputs.status": "UNSPENT"
+                }
+            },
+            {
+                "$unwind": "$graphTxn.outputs"
+            },
+            {
+                "$match": {
+                    // "graphTxn.outputs.address": address,
+                    "graphTxn.outputs.status": "UNSPENT"
+                }
+            },
+            {
+                "$project": {
+                    "graphTxn": 1
+                }
+            },
+            {
+              "$lookup": {
+                "from": "tokens",
+                "localField": "graphTxn.details.tokenIdHex",
+                "foreignField": "tokenDetails.tokenIdHex",
+                "as": "token"
+              }
+            }
+        ],
+        "sort": {
+          "token.tokenDetails.timestamp_unix": -1
+        },
+        "limit": limit,
+        "skip": skip
+    },
+    "r": {
+      "f": "[ .[] | { name: .token[0].tokenDetails.name, date: .token[0].tokenDetails.timestamp_unix, tokenId: .token[0].tokenDetails.tokenIdHex, owner: .graphTxn.outputs.address } ]"
+    }
+  };
+
+  if (address) {
+    if (address.indexOf("simpleledger:") === -1) {
+      address = `simpleledger:${address}`;
+    }
+
+    (query["q"]["aggregate"] as any[])[0]["$match"]["graphTxn.outputs.address"] = address;
+    (query["q"]["aggregate"] as any[])[2]["$match"]["graphTxn.outputs.address"] = address;
+  }
+
+  // console.log(JSON.stringify(query, null, 2));
+
+  return query;
+}
+
+export function newWaifus(address?: string, limit: number = 10, skip: number = 0) {
+  let query = {
+    "v": 3,
+    "q": {
+      "db": ["c", "u"],
+      "aggregate": [
+        {
+          "$match": {
+            "slp.valid": true,
+            "slp.detail.transactionType": "SEND",
+            "slp.detail.versionType": 65,
+            "slp.detail.symbol": "WAIFU"
+          }
+        },
+        {
+          "$sort": {
+            "_id": -1
+          }
+        },
+        {
+          "$skip": skip
+        },
+        {
+          "$limit": limit
+        }
+      ],
+      "limit": limit
+    },
+    "r": {
+      "f": "[ .[] | { name: .slp.detail.name, date: 0, tokenId: .slp.detail.tokenIdHex, owner: .slp.detail.outputs[0].address } ]"
+    }
+  };
+
+  if (address) {
+    if (address.indexOf("simpleledger:") === -1) {
+      address = `simpleledger:${address}`;
+    }
+
+    (query["q"]["aggregate"] as any[])[0]["$match"]["slp.detail.outputs.address"] = address;
+  }
+
+  // console.log(JSON.stringify(query, null, 2));
+
+  return query;
 }
 
 export function singleWaifu(tokenId: string) {

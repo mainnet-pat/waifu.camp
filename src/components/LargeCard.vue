@@ -4,7 +4,7 @@
     <div>
       <div style="text-align: left; margin: 10pt">
         <div class="card">
-          <div class="card-image" @click="imageClick">
+          <div class="card-image">
             <figure class="image is-4by4">
               <img :src="`https://icons.waifufaucet.com/original/${waifu.tokenId}.png`" :alt="waifu.name">
             </figure>
@@ -18,11 +18,11 @@
 
             <div class="content">
               <div style="cursor: pointer">
-                <span @click="addressClick()" v-text="`Owner: ${waifu.owner.split(':')[1].substring(0, 12)}...`"></span>
+                <span @click="addressClick()" v-text="`Owner: ${short()}`"></span>
                 <span @click="addressExplore()"><b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon></span>
               </div>
               <div style="display: flex;  flex-direction: row;">
-                <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div>
+                <!-- <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div> -->
                 <div class="" style="flex-grow: 2; text-align: right" :style="waifu.liked ? 'color: red' : 'color: black'" @click="toggleLike">
                   <b-icon icon="heart" size="is-small"></b-icon>
                   <span v-text="waifu.likes"></span>
@@ -41,6 +41,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Waifu, defaultWaifu } from "@/scripts/Waifu";
 import Card from "@/components/Card.vue";
+import * as Utils from "@/scripts/Utils";
 
 @Component({
   components: {
@@ -79,6 +80,10 @@ export default class LargeCard extends Vue {
 
   public addressExplore() {
     window.open(`https://simpleledger.info/#address/${this.waifu.owner}`, "_blank"); 
+  }
+
+  public short() {
+    return Utils.addressToName(this.waifu.owner);
   }
 }
 </script>
