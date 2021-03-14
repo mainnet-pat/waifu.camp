@@ -6,7 +6,7 @@
         <div class="card">
           <div class="card-image" @click="imageClick">
             <figure class="image is-4by4">
-              <img :src="`https://icons.waifufaucet.com/128/${waifu.tokenId}.png`" :alt="waifu.name">
+              <img :src="`https://icons.waifufaucet.com/original/${waifu.tokenId}.png`" :alt="waifu.name">
             </figure>
           </div>
           <div class="card-content">

@@ -44,34 +44,47 @@
                     </b-dropdown-item>
                     <b-dropdown-item @click="$router.push( { name: 'Camp', params: { address: user().address } } )">
                         <b-icon icon="account"></b-icon>
-                        Your camp
+                        <span class="menu-item-fix">Your camp</span>
                     </b-dropdown-item>
                     <b-dropdown-item @click="logout()">
                         <b-icon icon="logout"></b-icon>
-                        Logout
+                        <span class="menu-item-fix">Logout</span>
                     </b-dropdown-item>
                     <hr class="dropdown-divider">
                   </div>
 
                   <b-dropdown-item @click="$router.push('/')">
                       <b-icon icon="home"></b-icon>
-                      Home
+                      <span class="menu-item-fix">Home</span>
                   </b-dropdown-item>
                   <b-dropdown-item @click="$router.push('/top')">
                       <b-icon icon="fire"></b-icon>
-                      Top
+                      <span class="menu-item-fix">Top</span>
                   </b-dropdown-item>
                   <b-dropdown-item @click="$router.push('/random')">
                       <b-icon icon="dice-multiple"></b-icon>
-                      Random
+                      <span class="menu-item-fix">Random</span>
                   </b-dropdown-item>
                   <b-dropdown-item @click="$router.push('/search')">
                       <b-icon icon="magnify"></b-icon>
-                      Search
+                      <span class="menu-item-fix">Search</span>
                   </b-dropdown-item>
-                  <b-dropdown-item @click="faucetClick()">
-                      <b-icon icon="water-pump"></b-icon>
-                      Faucet
+
+                  <hr class="dropdown-divider">
+
+                  <b-dropdown-item @click="juungleClick()">
+                      <b-icon icon="palm-tree"></b-icon>
+                      <span class="menu-item-fix">Marketplace</span>
+                  </b-dropdown-item>
+
+                  <b-dropdown-item @click="telegramClick()">
+                      <b-icon icon="send"></b-icon>
+                      <span class="menu-item-fix">Waifu Research</span>
+                  </b-dropdown-item>
+
+                  <b-dropdown-item @click="noiseClick()">
+                      <b-icon icon="alpha-n-box-outline"></b-icon>
+                      <span class="menu-item-fix">noise.cash</span>
                   </b-dropdown-item>
 
                   <div v-if="!loggedIn()">
@@ -137,6 +150,18 @@ import * as Utils from '@/scripts/Utils';
         window.open("https://waifufaucet.com", "_blank");
       },
 
+      juungleClick() {
+        window.open("https://juungle.net", "_blank");
+      },
+
+      telegramClick() {
+        window.open("https://t.me/waifuresearch", "_blank");
+      },
+
+      noiseClick() {
+        window.open("http://noise.cash/n/waifu", "_blank");
+      },
+
       getText(elementClassName) {
         return this.$el.getElementsByClassName(elementClassName).item(0).textContent.trim();
       },
@@ -191,5 +216,11 @@ div.navbar-menus {
 
 nav.navbar {
   background-color: #00000000;
+}
+
+.menu-item-fix {
+  position: relative;
+  top: -4px;
+  margin-left: 5px;;
 }
 </style>

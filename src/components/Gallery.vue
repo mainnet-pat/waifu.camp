@@ -35,7 +35,7 @@ export default class Gallery extends Vue {
 
   get moreVisible() {
     // return this.waifus.length >= this.limit;
-    return true;
+    return this.waifus.length > 0;
   }
 
   async beforeMount() {
@@ -43,6 +43,9 @@ export default class Gallery extends Vue {
   }
 
   async fetchMoreWaifus() {
+    const provider = new SlpDbProvider(Network.MAINNET);
+    provider.caching = false;
+
     let query;
     if (this.random) {
       query = SlpDbTemplates.randomWaifus(this.limit);
@@ -52,8 +55,6 @@ export default class Gallery extends Vue {
       query = SlpDbTemplates.addressWaifus(this.address, this.limit, this.skip);
     }
 
-    const provider = new SlpDbProvider(Network.MAINNET);
-    provider.caching = true;
     const rawResult = (await provider.SlpDbQuery(query));
     let result: Waifu[] = [...(rawResult.t || []), ...(rawResult.g || []), ...(rawResult.u || []), ...(rawResult.c || [])];
 
@@ -63,11 +64,10 @@ export default class Gallery extends Vue {
     }
     for (const waifu of result) {
       waifu.date = new Date((waifu.date as unknown as number) * 1000);
+      if (this.waifus.findIndex(val => val.tokenId === waifu.tokenId) === -1) {
+        this.waifus.push(waifu);
+      }
     }
-    this.waifus = [...this.waifus, ...result];
-    this.waifus = this.waifus.filter((val, idx) =>
-      idx === this.waifus.findIndex(w => w.tokenId === val.tokenId)
-    );
 
     this.skip += this.limit;
   }

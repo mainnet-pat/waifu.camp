@@ -131,9 +131,9 @@ export function newWaifus(address?: string, limit: number = 10, skip: number = 0
         {
           "$match": {
             "slp.valid": true,
-            "slp.detail.transactionType": "SEND",
             "slp.detail.versionType": 65,
-            "slp.detail.symbol": "WAIFU"
+            "slp.detail.symbol": "WAIFU",
+            "$or": [{ "blk.i": { "$gte": 670000 }}, { "blk": null}]
           }
         },
         {
@@ -151,7 +151,7 @@ export function newWaifus(address?: string, limit: number = 10, skip: number = 0
       "limit": limit
     },
     "r": {
-      "f": "[ .[] | { name: .slp.detail.name, date: 0, tokenId: .slp.detail.tokenIdHex, owner: .slp.detail.outputs[0].address } ]"
+      "f": "[ .[] | { name: .slp.detail.name, date: .blk.t, tokenId: .slp.detail.tokenIdHex, owner: .slp.detail.outputs[0].address } ]"
     }
   };
 
@@ -164,6 +164,41 @@ export function newWaifus(address?: string, limit: number = 10, skip: number = 0
   }
 
   // console.log(JSON.stringify(query, null, 2));
+
+  return query;
+}
+
+export function transactionHistory(tokenId: string) {
+  let query = {
+    "v": 3,
+    "q": {
+      "db": [
+        "c", "u"
+      ],
+      "aggregate": [
+        {
+          "$match": {
+            "slp.detail.tokenIdHex": tokenId
+          }
+        },
+        {
+          "$limit": 1000
+        },
+        {
+          "$lookup": {
+            "from": "graphs",
+            "localField": "tx.h",
+            "foreignField": "graphTxn.txid",
+            "as": "graph"
+          }
+        }
+      ],
+      "limit": 1000
+    },
+      "r": {
+        "f": "[ .[] | { txType: .graph[0].graphTxn.details.transactionType, previousOwner: .graph[0].graphTxn.inputs[0].address, owner: .graph[0].graphTxn.outputs[0].address, date: .blk.t, tokenId: .slp.detail.tokenIdHex } ]"
+      }
+  }
 
   return query;
 }

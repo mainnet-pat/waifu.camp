@@ -1,4 +1,7 @@
 export function addressToName(address: string) {
+  if (!address) {
+    return address;
+  }
   if (address.indexOf(":")>0) {
     return address.split(':')[1].substring(0, 4) + "-San";
   } else {

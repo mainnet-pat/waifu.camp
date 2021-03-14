@@ -6,5 +6,11 @@ module.exports = {
       inline: true,
       public: 'waifu.camp'
     },
+    target: "web",
+    resolve: {
+      alias: {
+        // crypto: false
+      }
+    }
   }
 };
