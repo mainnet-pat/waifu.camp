@@ -5,6 +5,7 @@
         <Card v-for="waifu in waifus" :key="waifu.name" :config="waifu"></Card>
       </transition-group>
       <b-button v-if="moreVisible" v-text="'Load More'" @click="fetchMoreWaifus"></b-button>
+      <b-button v-if="loadAllVisible" v-text="'Load All'" @click="fetchAllWaifus" style="margin-left: 30px"></b-button>
     </div>
   </div>
 </template>
@@ -38,21 +39,29 @@ export default class Gallery extends Vue {
     return this.waifus.length > 0;
   }
 
+  get loadAllVisible() {
+    return this.moreVisible && this.address;
+  }
+
   async beforeMount() {
     this.fetchMoreWaifus();
   }
 
-  async fetchMoreWaifus() {
+  async fetchMoreWaifus(limit?: number) {
+    if (!limit) {
+      limit = this.limit;
+    }
+
     const provider = new SlpDbProvider(Network.MAINNET);
     provider.caching = false;
 
     let query;
     if (this.random) {
-      query = SlpDbTemplates.randomWaifus(this.limit);
+      query = SlpDbTemplates.randomWaifus(limit);
     } else if (this.new) {
-      query = SlpDbTemplates.newWaifus("", this.limit, this.skip);
+      query = SlpDbTemplates.newWaifus("", limit, this.skip);
     } else {
-      query = SlpDbTemplates.addressWaifus(this.address, this.limit, this.skip);
+      query = SlpDbTemplates.addressWaifus(this.address, limit, this.skip);
     }
 
     const rawResult = (await provider.SlpDbQuery(query));
@@ -69,7 +78,11 @@ export default class Gallery extends Vue {
       }
     }
 
-    this.skip += this.limit;
+    this.skip += limit;
+  }
+
+  async fetchAllWaifus(limit?: number) {
+    return this.fetchMoreWaifus(1e6);
   }
 }
 </script>

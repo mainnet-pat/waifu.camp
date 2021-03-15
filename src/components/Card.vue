@@ -9,10 +9,10 @@
               <img :src="`https://icons.waifufaucet.com/original/${waifu.tokenId}.png`" :alt="waifu.name">
             </figure>
           </div>
-          <div class="card-content">
-            <div class="media">
+          <div class="card-content card-content-fix">
+            <div class="media media-fix">
               <router-link tag="a" class="media-content" :to="`/waifu/${waifu.tokenId}`" target="_blank">
-                <p class="title is-4" v-text="waifu.name"></p>
+                <p class="title is-6" v-text="waifu.name"></p>
               </router-link>
             </div>
 
@@ -106,7 +106,15 @@ export default class Card extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  .card .media:not(:last-child) {
-    margin-bottom: 0.75rem;
+  // .card .media:not(:last-child) {
+  //   margin-bottom: 0.75rem;
+  // }
+
+  .card-content-fix {
+    padding: 0.7rem !important
+  }
+
+  .media-fix {
+    margin-bottom: 0.5rem !important
   }
 </style>
