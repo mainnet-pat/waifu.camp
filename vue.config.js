@@ -4,7 +4,8 @@ module.exports = {
     devServer: {
       compress: true,
       inline: true,
-      public: 'waifu.camp'
+      public: 'localhost',
+      host: 'localhost'
     },
     target: "web",
     resolve: {
