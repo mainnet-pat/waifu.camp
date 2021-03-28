@@ -4,7 +4,7 @@
       <transition-group name="slide-fade" mode="out-in" class="tile is-parent" style="flex-wrap: wrap;">
         <Card v-for="waifu in waifus" :key="waifu.name" :config="waifu"></Card>
       </transition-group>
-      <b-button v-if="moreVisible" v-text="'Load More'" @click="fetchMoreWaifus"></b-button>
+      <b-button v-if="moreVisible" v-text="'Load More'" @click="() => fetchMoreWaifus()"></b-button>
       <b-button v-if="loadAllVisible" v-text="'Load All'" @click="fetchAllWaifus" style="margin-left: 30px"></b-button>
     </div>
   </div>
