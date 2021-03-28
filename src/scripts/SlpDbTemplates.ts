@@ -168,6 +168,49 @@ export function newWaifus(address?: string, limit: number = 10, skip: number = 0
   return query;
 }
 
+export function topHolders() {
+  return {
+    "v": 3,
+    "q": {
+      "db": ["g"],
+      "aggregate": [
+        {
+          "$match": {
+            "tokenDetails.nftGroupIdHex": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
+            "graphTxn.outputs.status": "UNSPENT"
+          }
+        },
+        {
+          "$unwind": "$graphTxn.outputs"
+        },
+        {
+          "$match": {
+            "graphTxn.outputs.status": "UNSPENT"
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "address": "$graphTxn.outputs.address"
+            },
+            "count": { "$sum": 1 }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        },
+        {
+          "$limit": 10
+        }
+      ]
+    },
+    "r": {
+    }
+  }
+}
+
 export function transactionHistory(tokenId: string) {
   let query = {
     "v": 3,
