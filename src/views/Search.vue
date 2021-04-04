@@ -5,11 +5,14 @@
 
     <section>
       <b-field position="is-centered" class="w-512">
-        <b-input v-model="address" placeholder="Simpleledger address" type="search" icon="magnify"></b-input>
+        <b-input v-model="query" placeholder="Address, token id or name" type="search" icon="magnify" @keyup.native.enter="() => search()"></b-input>
         <p class="control">
-          <b-button @click="search()" label="Search" type="is-info" />
+          <b-button @click="() => search()" label="Search" type="is-info" />
         </p>
       </b-field>
+      <div v-if="update" :key="update">
+        <Gallery :searchQuery="query" style="padding-bottom: 1rem;"></Gallery>
+      </div>
     </section>
   </div>
 </template>
@@ -28,16 +31,30 @@ import bchaddr from "bchaddrjs-slp";
   }
 })
 export default class Search extends Vue {
-  private address: string = "";
+  @Prop({default: ""}) searchQuery!: string;
+  private query: string = "";
+  private update: number = 0;
+
+  async beforeMount() {
+    if (this.searchQuery) {
+      this.query = this.searchQuery;
+      this.search();
+    }
+  }
 
   private search() {
-    if (!bchaddr.isValidAddress(this.address)) {
-      this.$buefy.snackbar.open({message: `Invalid simpleledger address`, type: 'is-warning', position: 'is-top-right'});
+    if (bchaddr.isValidAddress(this.query)) {
+      const address = bchaddr.toSlpAddress(this.query);
+      this.$router.push({name: "Camp", params: { address: address }});
       return;
     }
 
-    const address = bchaddr.toSlpAddress(this.address);
-    this.$router.push({name: "Camp", params: { address: address }});
+    if (this.query.match(/^[0-9a-fA-F]{64}$/)) {
+      this.$router.push({name: "Waifu", params: { tokenId: this.query }});
+      return;
+    }
+
+    this.update++;
   }
 }
 </script>

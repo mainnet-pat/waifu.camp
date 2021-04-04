@@ -21,6 +21,9 @@
                 <span @click="addressClick()" v-text="`Owner: ${short()}`"></span>
                 <span @click="addressExplore()"><b-icon style="margin-left:10px" icon="share" size="is-small"></b-icon></span>
               </div>
+              <div v-if="waifu.txCount">
+                <span v-text="`Transactions: ${waifu.txCount}`"></span>
+              </div>
               <div style="display: box;  flex-direction: row;">
                 <!-- <div class="" style="flex-grow: 8"><time v-text="waifu.date.toLocaleString()"></time></div> -->
                 <div class="" style="flex-grow: 2; text-align: right" :style="waifu.liked ? 'color: red' : 'color: black'" @click="toggleLike">

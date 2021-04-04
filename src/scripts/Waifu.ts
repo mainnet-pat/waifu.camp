@@ -6,6 +6,7 @@ export interface Waifu {
   likes: number;
   liked: boolean;
   fullscreen: boolean;
+  txCount?: number;
 }
 
 export const defaultWaifu: Waifu = {

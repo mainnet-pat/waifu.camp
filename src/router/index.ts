@@ -58,9 +58,10 @@ const routes: Array<RouteConfig> = [
     component: Top,
   },
   {
-    path: "/search",
+    path: "/search/:searchQuery?",
     name: "Search",
     component: Search,
+    props: true
   }
 ];
 

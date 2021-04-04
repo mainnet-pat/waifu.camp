@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es2020",
+    "module": "commonjs",
     "strict": true,
+    "noImplicitAny": false /* Raise error on expressions and declarations with an implied 'any' type. */,
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",

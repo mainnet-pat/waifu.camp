@@ -79,7 +79,7 @@ const generate_npc = (tokenid: string): any => {
 };
 
 const extract_phrases = (npc_phrase_obj: any, phrases: any, mid: number) => {
-    let ret = [];
+    let ret: string[] = [];
 
     for (let k of Object.keys(npc_phrase_obj)) {
         const phrase_id: number = get_phrase_id_from_v(npc_phrase_obj[k], mid);

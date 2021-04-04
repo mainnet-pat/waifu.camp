@@ -74,7 +74,7 @@
                   </b-table-column>
 
                   <b-table-column field="date" label="Date" centered v-slot="props">
-                      {{ new Date(props.row.date * 1000).toLocaleDateString() }}
+                      {{ props.row.date ? new Date(props.row.date * 1000).toLocaleDateString() : "Pending" }}
                   </b-table-column>
                 </b-table>
               </div>
@@ -93,6 +93,7 @@ import { Transaction } from "@/scripts/Transaction";
 import Card from "@/components/Card.vue";
 import * as Utils from "@/scripts/Utils";
 import { traits } from "@/scripts/traits";
+// @ts-ignore
 import { Network, SlpDbProvider } from "mainnet-js";
 import * as SlpDbTemplates from "@/scripts/SlpDbTemplates";
 

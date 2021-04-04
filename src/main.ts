@@ -6,6 +6,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
+// @ts-ignore
 import { SlpDbProvider } from "mainnet-js";
 SlpDbProvider.servers.mainnet.dataSource = "https://slpserve.waifu.camp"
 

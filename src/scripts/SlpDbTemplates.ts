@@ -168,49 +168,6 @@ export function newWaifus(address?: string, limit: number = 10, skip: number = 0
   return query;
 }
 
-export function topHolders() {
-  return {
-    "v": 3,
-    "q": {
-      "db": ["g"],
-      "aggregate": [
-        {
-          "$match": {
-            "tokenDetails.nftGroupIdHex": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
-            "graphTxn.outputs.status": "UNSPENT"
-          }
-        },
-        {
-          "$unwind": "$graphTxn.outputs"
-        },
-        {
-          "$match": {
-            "graphTxn.outputs.status": "UNSPENT"
-          }
-        },
-        {
-          "$group": {
-            "_id": {
-              "address": "$graphTxn.outputs.address"
-            },
-            "count": { "$sum": 1 }
-          }
-        },
-        {
-          "$sort": {
-            "count": -1
-          }
-        },
-        {
-          "$limit": 10
-        }
-      ]
-    },
-    "r": {
-    }
-  }
-}
-
 export function transactionHistory(tokenId: string) {
   let query = {
     "v": 3,
@@ -315,3 +272,147 @@ export function randomWaifus(limit: number = 10) {
     }
   };
 }
+
+export function searchWaifus(searchQuery: string, limit: number = 10, skip: number = 0) {
+  let query = {
+    "v": 3,
+    "q": {
+      "db": ["t"],
+      "aggregate": [
+        {
+          "$match": {
+            "nftParentId": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
+            "lastUpdatedBlock": {
+              "$gt": 670000
+            },
+            "tokenDetails.name": { "$regex": searchQuery, "$options": "ig" }
+          }
+        },
+        { "$skip": skip },
+        { "$limit": limit },
+        {
+          "$lookup": {
+            "from": "graphs",
+            "localField": "tokenDetails.tokenIdHex",
+            "foreignField": "tokenDetails.tokenIdHex",
+            "as": "graph"
+          }
+        },
+        {
+          "$match": {
+            "graph.graphTxn.outputs.status": "UNSPENT"
+          }
+        }
+      ],
+      "sort": {
+        "tokenDetails.timestamp_unix": -1
+      },
+      "limit": limit
+    },
+    "r": {
+      "f": "[ .[] | { name: .tokenDetails.name, date: .tokenDetails.timestamp_unix, tokenId: .tokenDetails.tokenIdHex, owner: .graph[-1].graphTxn.outputs[0].address } ]"
+    }
+  };
+
+  // console.log(JSON.stringify(query, null, 2));
+
+  return query;
+}
+
+//#region Top Stats
+export function topTransactedWaifus(limit: number = 10, skip: number = 0) {
+  let query = {
+    "v": 3,
+    "q": {
+      "db": ["g"],
+      "aggregate": [
+        {
+          "$match": {
+            "tokenDetails.nftGroupIdHex": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66"
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "tokenId": "$graphTxn.details.tokenIdHex"
+            },
+            "count": { "$sum": 1 }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        },
+        { "$skip": skip },
+        { "$limit": limit },
+        {
+          "$lookup": {
+            "from": "graphs",
+            "localField": "_id.tokenId",
+            "foreignField": "tokenDetails.tokenIdHex",
+            "as": "graph"
+          }
+        },
+        {
+          "$match": {
+            "graph.graphTxn.outputs.status": "UNSPENT"
+          }
+        }
+      ]
+    },
+    "r": {
+        "f": "[ .[] | { txCount: .count, tokenId: ._id.tokenId, name: .graph[0].graphTxn.details.name, owner: .graph[-1].graphTxn.outputs[0].address, } ]"
+    }
+  };
+
+  // console.log(JSON.stringify(query, null, 2));
+
+  return query;
+}
+
+export function topHolders() {
+  return {
+    "v": 3,
+    "q": {
+      "db": ["g"],
+      "aggregate": [
+        {
+          "$match": {
+            "tokenDetails.nftGroupIdHex": "a2987562a405648a6c5622ed6c205fca6169faa8afeb96a994b48010bd186a66",
+            "graphTxn.outputs.status": "UNSPENT"
+          }
+        },
+        {
+          "$unwind": "$graphTxn.outputs"
+        },
+        {
+          "$match": {
+            "graphTxn.outputs.status": "UNSPENT"
+          }
+        },
+        {
+          "$group": {
+            "_id": {
+              "address": "$graphTxn.outputs.address"
+            },
+            "count": { "$sum": 1 }
+          }
+        },
+        {
+          "$sort": {
+            "count": -1
+          }
+        },
+        {
+          "$limit": 10
+        }
+      ]
+    },
+    "r": {
+        "f": "[ .[] | { count: .count, address: ._id.address } ]"
+    }
+  }
+}
+
+//#endregion

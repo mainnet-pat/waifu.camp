@@ -22,6 +22,7 @@ import Card from "@/components/Card.vue";
 
 
 import { Waifu } from "@/scripts/Waifu";
+// @ts-ignore
 import { Network, SlpDbProvider } from "mainnet-js";
 import * as SlpDbTemplates from "@/scripts/SlpDbTemplates";
 
